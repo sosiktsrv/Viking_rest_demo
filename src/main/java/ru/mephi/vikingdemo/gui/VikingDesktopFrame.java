@@ -3,13 +3,7 @@ package ru.mephi.vikingdemo.gui;
 import ru.mephi.vikingdemo.model.Viking;
 import ru.mephi.vikingdemo.service.VikingService;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -40,8 +34,49 @@ public class VikingDesktopFrame extends JFrame {
         JButton createButton = new JButton("Create random viking");
         createButton.addActionListener(event -> onCreateViking());
 
+        JButton deleteButton = new JButton("Delete");
+        deleteButton.addActionListener(e -> {
+            int row = vikingTable.getSelectedRow();
+            if (row >= 0) {
+                vikingService.deleteViking(row);
+                tableModel.deleteViking(row);
+            }
+        });
+
+        JButton updateButton = new JButton("Update");
+        updateButton.addActionListener(e -> {
+            int row = vikingTable.getSelectedRow();
+            if (row >= 0) {
+                Viking old = vikingService.findAll().get(row);
+
+                String newName = JOptionPane.showInputDialog("New name:", old.name());
+                if (newName == null) return;
+
+                String newAge = JOptionPane.showInputDialog("New age:", old.age());
+                if (newAge == null) return;
+
+                String newHeight = JOptionPane.showInputDialog("New height (cm):", old.heightCm());
+                if (newHeight == null) return;
+
+                Viking updated = new Viking(
+                        newName,
+                        Integer.parseInt(newAge),
+                        Integer.parseInt(newHeight),
+                        old.hairColor(),
+                        old.beardStyle(),
+                        old.equipment()
+                );
+
+                vikingService.updateViking(row, updated);
+                tableModel.updateViking(row, updated);
+            }
+        });
+
         JPanel bottomPanel = new JPanel();
         bottomPanel.add(createButton);
+        bottomPanel.add(createButton);
+        bottomPanel.add(deleteButton);
+        bottomPanel.add(updateButton);
         add(bottomPanel, BorderLayout.SOUTH);
     }
 
