@@ -52,4 +52,18 @@ public class VikingController {
     public void addViking(){
         vikingListener.testAdd();
     }
+    @PostMapping("/add")
+    public Viking addViking(@RequestBody Viking viking) {
+        return vikingService.addSpecificViking(viking);
+    }
+
+    @DeleteMapping("/{index}")
+    public boolean deleteViking(@PathVariable int index) {
+        return vikingService.deleteViking(index);
+    }
+
+    @PutMapping("/{index}")
+    public boolean updateViking(@PathVariable int index, @RequestBody Viking viking) {
+        return vikingService.updateViking(index, viking);
+    }
 }

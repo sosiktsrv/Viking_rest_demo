@@ -29,4 +29,25 @@ public class VikingService {
         vikings.add(viking);
         return viking;
     }
+
+        public Viking addSpecificViking(Viking viking) {
+        vikings.add(viking);
+        return viking;
+    }
+
+    public boolean deleteViking(int index) {
+        if (index >= 0 && index < vikings.size()) {
+            vikings.remove(index);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean updateViking(int index, Viking updatedViking) {
+        if (index >= 0 && index < vikings.size()) {
+            vikings.set(index, updatedViking);
+            return true;
+        }
+        return false;
+    }
 }
