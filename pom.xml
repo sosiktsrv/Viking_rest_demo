@@ -17,8 +17,8 @@
     <description>Demo project: Swing GUI + REST API + Swagger for vikings</description>
 
     <properties>
-        <java.version>24</java.version>
-        <maven.compiler.release>24</maven.compiler.release>
+        <java.version>21</java.version>
+        <maven.compiler.release>21</maven.compiler.release>
         <springdoc.version>3.0.2</springdoc.version>
         <datafaker.version>2.5.4</datafaker.version>
     </properties>
