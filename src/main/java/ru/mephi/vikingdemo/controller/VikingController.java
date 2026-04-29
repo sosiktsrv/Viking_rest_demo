@@ -22,9 +22,9 @@ public class VikingController {
         this.vikingService = vikingService;
         this.vikingListener = vikingListener;
     }
-    
+
     @GetMapping
-    @Operation(summary = "Получить список созданных викингов", 
+    @Operation(summary = "Получить список созданных викингов",
             operationId = "getAllVikings")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Список успешно получен")
@@ -35,7 +35,7 @@ public class VikingController {
     }
 
     @GetMapping("/test")
-    @Operation(summary = "Получить список тестовых викингов", 
+    @Operation(summary = "Получить список тестовых викингов",
             operationId = "getTest")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Список успешно получен")
@@ -44,23 +44,30 @@ public class VikingController {
         System.out.println("GET /api/vikings/test called");
         return List.of("Ragnar", "Bjorn");
     }
-    
+
     @PostMapping("/post")
     public void addViking(){
         vikingListener.testAdd();
     }
+
     @PostMapping("/add")
     public Viking addViking(@RequestBody Viking viking) {
-        return vikingService.addSpecificViking(viking);
+        System.out.println("POST /api/vikings/add called");
+        vikingListener.addVikingAndRefresh(viking);
+        return viking;
     }
 
     @DeleteMapping("/{index}")
     public boolean deleteViking(@PathVariable int index) {
-        return vikingService.deleteViking(index);
+        System.out.println("DELETE /api/vikings/" + index + " called");
+        vikingListener.deleteVikingAndRefresh(index);
+        return true;
     }
 
     @PutMapping("/{index}")
     public boolean updateViking(@PathVariable int index, @RequestBody Viking viking) {
-        return vikingService.updateViking(index, viking);
+        System.out.println("PUT /api/vikings/" + index + " called");
+        vikingListener.updateVikingAndRefresh(index, viking);
+        return true;
     }
 }

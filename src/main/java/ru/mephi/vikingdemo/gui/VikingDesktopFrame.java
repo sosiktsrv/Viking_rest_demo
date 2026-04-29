@@ -7,12 +7,13 @@ import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
-
+import java.util.List;
 
 public class VikingDesktopFrame extends JFrame {
 
     private final VikingService vikingService;
     private final VikingTableModel tableModel = new VikingTableModel();
+    private JTable vikingTable;
 
     public VikingDesktopFrame(VikingService vikingService) {
         this.vikingService = vikingService;
@@ -27,7 +28,7 @@ public class VikingDesktopFrame extends JFrame {
         header.setFont(header.getFont().deriveFont(Font.BOLD, 18f));
         add(header, BorderLayout.NORTH);
 
-        JTable vikingTable = new JTable(tableModel);
+        vikingTable = new JTable(tableModel);
         vikingTable.setRowHeight(28);
         add(new JScrollPane(vikingTable), BorderLayout.CENTER);
 
@@ -74,7 +75,6 @@ public class VikingDesktopFrame extends JFrame {
 
         JPanel bottomPanel = new JPanel();
         bottomPanel.add(createButton);
-        bottomPanel.add(createButton);
         bottomPanel.add(deleteButton);
         bottomPanel.add(updateButton);
         add(bottomPanel, BorderLayout.SOUTH);
@@ -84,8 +84,17 @@ public class VikingDesktopFrame extends JFrame {
         Viking viking = vikingService.createRandomViking();
         tableModel.addViking(viking);
     }
-    
+
     public void addNewViking(Viking viking){
         tableModel.addViking(viking);
+    }
+
+    public void refreshTable(List<Viking> vikings) {
+        while (tableModel.getRowCount() > 0) {
+            tableModel.deleteViking(0);
+        }
+        for (Viking v : vikings) {
+            tableModel.addViking(v);
+        }
     }
 }
