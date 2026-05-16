@@ -53,6 +53,7 @@ public class VikingTableModel extends AbstractTableModel {
                 .map(item -> item.name() + " [" + item.quality() + "]")
                 .collect(Collectors.joining(", "));
     }
+
     public void deleteViking(int row) {
         data.remove(row);
         fireTableRowsDeleted(row, row);

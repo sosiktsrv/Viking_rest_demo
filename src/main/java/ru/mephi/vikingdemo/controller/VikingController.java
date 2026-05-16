@@ -6,7 +6,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 import ru.mephi.vikingdemo.model.Viking;
+import ru.mephi.vikingdemo.model.BeardStyle;
+import ru.mephi.vikingdemo.model.HairColor;
 import ru.mephi.vikingdemo.service.VikingService;
+import ru.mephi.vikingdemo.service.VikingLambdaService;
 
 import java.util.List;
 
@@ -16,11 +19,13 @@ import java.util.List;
 public class VikingController {
 
     private final VikingService vikingService;
-    private VikingListener vikingListener;
+    private final VikingListener vikingListener;
+    private final VikingLambdaService lambdaService;
 
-    public VikingController(VikingService vikingService, VikingListener vikingListener) {
+    public VikingController(VikingService vikingService, VikingListener vikingListener, VikingLambdaService lambdaService) {
         this.vikingService = vikingService;
         this.vikingListener = vikingListener;
+        this.lambdaService = lambdaService;
     }
 
     @GetMapping
@@ -69,5 +74,66 @@ public class VikingController {
         System.out.println("PUT /api/vikings/" + index + " called");
         vikingListener.updateVikingAndRefresh(index, viking);
         return true;
+    }
+
+    @GetMapping("/count/age/greater/{age}")
+    public long countAgeGreater(@PathVariable int age) {
+        return lambdaService.countByAgeGreaterThan(age);
+    }
+
+    @GetMapping("/count/age/less/{age}")
+    public long countAgeLess(@PathVariable int age) {
+        return lambdaService.countByAgeLessThan(age);
+    }
+
+    @GetMapping("/count/age/between")
+    public long countAgeBetween(@RequestParam int min, @RequestParam int max) {
+        return lambdaService.countByAgeBetween(min, max);
+    }
+
+    @GetMapping("/count/age/outside")
+    public long countAgeOutside(@RequestParam int min, @RequestParam int max) {
+        return lambdaService.countByAgeOutside(min, max);
+    }
+
+    @GetMapping("/count/beard-and-hair")
+    public long countByBeardAndHair(@RequestParam BeardStyle beard, @RequestParam HairColor hair) {
+        return lambdaService.countByBeardAndHair(beard, hair);
+    }
+
+    @GetMapping("/count/axes/{count}")
+    public long countByAxes(@PathVariable int count) {
+        return lambdaService.countByAxesCount(count);
+    }
+
+    @GetMapping("/random-height-above-180")
+    public Viking getRandomVikingHeightAbove180() {
+        return lambdaService.getRandomVikingHeightAbove180();
+    }
+
+    @GetMapping("/legendary-equipment")
+    public List<Viking> getVikingsWithLegendaryEquipment() {
+        return lambdaService.getVikingsWithLegendaryEquipment();
+    }
+
+    @GetMapping("/red-bearded-sorted-by-age")
+    public List<Viking> getRedBeardedSortedByAge() {
+        return lambdaService.getRedBeardedVikingsSortedByAge();
+    }
+
+    @GetMapping("/ids/max")
+    public Integer getMaxId() {
+        return lambdaService.getMaxId();
+    }
+
+    @GetMapping("/ids/even")
+    public List<Integer> getEvenIds() {
+        return lambdaService.getEvenIds();
+    }
+
+    @PostMapping("/generate/{count}")
+    public String generateVikings(@PathVariable int count) {
+        vikingListener.generateAndRefresh(count);
+        return "Generated " + count + " random vikings";
     }
 }

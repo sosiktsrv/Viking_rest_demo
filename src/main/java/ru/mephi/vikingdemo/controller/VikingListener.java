@@ -7,7 +7,6 @@ import ru.mephi.vikingdemo.model.Viking;
 import ru.mephi.vikingdemo.service.VikingService;
 
 import javax.swing.SwingUtilities;
-import java.util.List;
 
 @Component
 public class VikingListener {
@@ -23,28 +22,34 @@ public class VikingListener {
         this.gui = gui;
     }
 
-    public void refreshGui() {
-        if (gui != null) {
-            SwingUtilities.invokeLater(() -> {
-                List<Viking> vikings = service.findAll();
-                gui.refreshTable(vikings);
-            });
-        }
-    }
-
     public void addVikingAndRefresh(Viking viking) {
         service.addSpecificViking(viking);
-        refreshGui();
+        if (gui != null) {
+            SwingUtilities.invokeLater(() -> gui.addNewViking(viking));
+        }
     }
 
     public void deleteVikingAndRefresh(int index) {
         service.deleteViking(index);
-        refreshGui();
+        if (gui != null) {
+            SwingUtilities.invokeLater(() -> gui.deleteViking(index));
+        }
     }
 
     public void updateVikingAndRefresh(int index, Viking viking) {
         service.updateViking(index, viking);
-        refreshGui();
+        if (gui != null) {
+            SwingUtilities.invokeLater(() -> gui.updateViking(index, viking));
+        }
+    }
+
+    public void generateAndRefresh(int count) {
+        for (int i = 0; i < count; i++) {
+            Viking viking = service.createRandomViking();
+            if (gui != null) {
+                SwingUtilities.invokeLater(() -> gui.addNewViking(viking));
+            }
+        }
     }
 
     void testAdd() {
