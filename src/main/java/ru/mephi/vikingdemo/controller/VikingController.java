@@ -11,6 +11,7 @@ import ru.mephi.vikingdemo.model.HairColor;
 import ru.mephi.vikingdemo.service.VikingService;
 import ru.mephi.vikingdemo.service.VikingLambdaService;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -113,12 +114,12 @@ public class VikingController {
 
     @GetMapping("/legendary-equipment")
     public List<Viking> getVikingsWithLegendaryEquipment() {
-        return lambdaService.getVikingsWithLegendaryEquipment();
+        return Arrays.asList(lambdaService.getVikingsWithLegendaryEquipment());
     }
 
     @GetMapping("/red-bearded-sorted-by-age")
     public List<Viking> getRedBeardedSortedByAge() {
-        return lambdaService.getRedBeardedVikingsSortedByAge();
+        return Arrays.asList(lambdaService.getRedBeardedVikingsSortedByAge());
     }
 
     @GetMapping("/ids/max")
@@ -128,7 +129,7 @@ public class VikingController {
 
     @GetMapping("/ids/even")
     public List<Integer> getEvenIds() {
-        return lambdaService.getEvenIds();
+        return Arrays.asList(lambdaService.getEvenIds());
     }
 
     @PostMapping("/generate/{count}")

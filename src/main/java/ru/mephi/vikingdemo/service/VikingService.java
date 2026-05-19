@@ -48,4 +48,11 @@ public class VikingService {
         }
         return false;
     }
+
+    public void generateRandomVikings(int count) {
+        for (int i = 0; i < count; i++) {
+            Viking viking = vikingFactory.createRandomViking();
+            vikings.add(viking);
+        }
+    }
 }

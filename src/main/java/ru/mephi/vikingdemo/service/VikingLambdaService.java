@@ -5,22 +5,18 @@ import ru.mephi.vikingdemo.model.Viking;
 import ru.mephi.vikingdemo.model.BeardStyle;
 import ru.mephi.vikingdemo.model.HairColor;
 
-import java.util.List;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @Service
 public class VikingLambdaService {
 
     private final VikingService vikingService;
-    private final VikingFactory vikingFactory;
     private final Random random = new Random();
 
-    public VikingLambdaService(VikingService vikingService, VikingFactory vikingFactory) {
+    public VikingLambdaService(VikingService vikingService) {
         this.vikingService = vikingService;
-        this.vikingFactory = vikingFactory;
     }
 
     private Predicate<Viking> ageGreaterThan(int age) {
@@ -98,49 +94,41 @@ public class VikingLambdaService {
     }
 
     public Viking getRandomVikingHeightAbove180() {
-        List<Viking> filtered = vikingService.findAll().stream()
+        Viking[] filtered = vikingService.findAll().stream()
                 .filter(heightAbove180())
-                .collect(Collectors.toList());
-        if (filtered.isEmpty()) return null;
-        return filtered.get(random.nextInt(filtered.size()));
+                .toArray(Viking[]::new);
+        if (filtered.length == 0) return null;
+        return filtered[random.nextInt(filtered.length)];
     }
 
-    public List<Viking> getVikingsWithLegendaryEquipment() {
+    public Viking[] getVikingsWithLegendaryEquipment() {
         return vikingService.findAll().stream()
                 .filter(hasLegendaryEquipment())
-                .collect(Collectors.toList());
+                .toArray(Viking[]::new);
     }
 
-    public List<Viking> getRedBeardedVikingsSortedByAge() {
+    public Viking[] getRedBeardedVikingsSortedByAge() {
         return vikingService.findAll().stream()
                 .filter(isRedBearded())
                 .sorted((v1, v2) -> Integer.compare(v1.age(), v2.age()))
-                .collect(Collectors.toList());
+                .toArray(Viking[]::new);
     }
 
-    private List<Integer> getAllIds() {
-        return IntStream.range(0, vikingService.findAll().size())
-                .boxed()
-                .collect(Collectors.toList());
+    private Integer[] getAllIds() {
+        return vikingService.findAll().stream()
+                .map(v -> vikingService.findAll().indexOf(v))
+                .toArray(Integer[]::new);
     }
 
     public Integer getMaxId() {
-        return getAllIds().stream()
-                .max(Integer::compareTo)
-                .orElse(null);
+        Integer[] ids = getAllIds();
+        if (ids.length == 0) return null;
+        return Arrays.stream(ids).max(Integer::compareTo).orElse(null);
     }
 
-    public List<Integer> getEvenIds() {
-        return getAllIds().stream()
+    public Integer[] getEvenIds() {
+        return Arrays.stream(getAllIds())
                 .filter(id -> id % 2 == 0)
-                .collect(Collectors.toList());
-    }
-
-    public void generateRandomVikings(int count) {
-        IntStream.range(0, count)
-                .forEach(i -> {
-                    Viking viking = vikingFactory.createRandomViking();
-                    vikingService.addSpecificViking(viking);
-                });
+                .toArray(Integer[]::new);
     }
 }

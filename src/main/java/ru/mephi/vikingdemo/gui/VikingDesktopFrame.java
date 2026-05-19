@@ -10,6 +10,7 @@ import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public class VikingDesktopFrame extends JFrame {
@@ -80,8 +81,9 @@ public class VikingDesktopFrame extends JFrame {
             if (input != null) {
                 try {
                     int count = Integer.parseInt(input);
+                    vikingService.generateRandomVikings(count);
                     for (int i = 0; i < count; i++) {
-                        Viking viking = vikingService.createRandomViking();
+                        Viking viking = vikingService.findAll().get(vikingService.findAll().size() - count + i);
                         tableModel.addViking(viking);
                     }
                     JOptionPane.showMessageDialog(this, "Generated " + count + " vikings!");
@@ -98,6 +100,10 @@ public class VikingDesktopFrame extends JFrame {
         bottomPanel.add(lambdaButton);
         bottomPanel.add(generateButton);
         add(bottomPanel, BorderLayout.SOUTH);
+
+        for (Viking v : vikingService.findAll()) {
+            tableModel.addViking(v);
+        }
     }
 
     private void onCreateViking() {
@@ -105,7 +111,7 @@ public class VikingDesktopFrame extends JFrame {
         tableModel.addViking(viking);
     }
 
-    public void addNewViking(Viking viking){
+    public void addNewViking(Viking viking) {
         tableModel.addViking(viking);
     }
 
@@ -118,8 +124,7 @@ public class VikingDesktopFrame extends JFrame {
     }
 
     private void showLambdaDialog() {
-        VikingLambdaService lambda = new VikingLambdaService(vikingService,
-                new ru.mephi.vikingdemo.service.VikingFactory());
+        VikingLambdaService lambda = new VikingLambdaService(vikingService);
 
         String message = "1) Оценка объема выборки:\n" +
                 "Возраст больше 30: " + lambda.countByAgeGreaterThan(30) + "\n" +
@@ -134,15 +139,15 @@ public class VikingDesktopFrame extends JFrame {
                 (lambda.getRandomVikingHeightAbove180() != null ?
                         lambda.getRandomVikingHeightAbove180().name() : "нет") + "\n" +
                 "Викинги с легендарным снаряжением: " +
-                lambda.getVikingsWithLegendaryEquipment().size() + "\n" +
+                lambda.getVikingsWithLegendaryEquipment().length + "\n" +
                 "Рыжебородые по возрасту: " +
-                lambda.getRedBeardedVikingsSortedByAge().stream()
+                Arrays.stream(lambda.getRedBeardedVikingsSortedByAge())
                         .map(v -> v.name() + "(" + v.age() + ")")
                         .collect(Collectors.joining(", ")) + "\n\n" +
 
                 "3) Операции с ID:\n" +
                 "Максимальный ID: " + lambda.getMaxId() + "\n" +
-                "Четные ID: " + lambda.getEvenIds() + "\n";
+                "Четные ID: " + Arrays.toString(lambda.getEvenIds()) + "\n";
 
         JOptionPane.showMessageDialog(this, message, "Результаты",
                 JOptionPane.INFORMATION_MESSAGE);
