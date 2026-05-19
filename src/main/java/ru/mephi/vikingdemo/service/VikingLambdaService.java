@@ -49,7 +49,8 @@ public class VikingLambdaService {
     }
 
     private Predicate<Viking> isRedBearded() {
-        return v -> v.hairColor() == HairColor.Red && v.beardStyle() == BeardStyle.LONG;
+        return v -> v.beardStyle() != BeardStyle.CLEAN_SHAVEN
+                && v.hairColor() == HairColor.Red;
     }
 
     public long countByAgeGreaterThan(int age) {
