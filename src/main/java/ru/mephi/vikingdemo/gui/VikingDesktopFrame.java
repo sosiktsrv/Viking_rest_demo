@@ -127,7 +127,7 @@ public class VikingDesktopFrame extends JFrame {
                 "Возраст от 20 до 40: " + lambda.countByAgeBetween(20, 40) + "\n" +
                 "Возраст вне 20-40: " + lambda.countByAgeOutside(20, 40) + "\n" +
                 "Борода LONG и волосы Red: " + lambda.countByBeardAndHair(BeardStyle.LONG, HairColor.Red) + "\n" +
-                "Имеют 2 топора: " + lambda.countByAxesCount(2) + "\n\n" +
+                "Имеют 1 или 2 топора: " + lambda.countByAxesOneOrTwo() + "\n\n" +
 
                 "2) Информация для вывода:\n" +
                 "Случайный викинг ростом выше 180: " +

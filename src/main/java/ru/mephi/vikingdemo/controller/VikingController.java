@@ -101,9 +101,9 @@ public class VikingController {
         return lambdaService.countByBeardAndHair(beard, hair);
     }
 
-    @GetMapping("/count/axes/{count}")
-    public long countByAxes(@PathVariable int count) {
-        return lambdaService.countByAxesCount(count);
+    @GetMapping("/count/axes")
+    public long countByAxes() {
+        return lambdaService.countByAxesOneOrTwo();
     }
 
     @GetMapping("/random-height-above-180")
